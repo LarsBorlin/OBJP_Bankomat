@@ -93,10 +93,8 @@ def ShowSaldo(account):
 
 def ListTransactions(account):
     for trans in account.transactionLogg:
-        print(f"Transaktionstyp: {trans.transactionType}")
-        print(f"Belopp: {trans.amount}")
         dateTimeString = trans.date.strftime("%Y-%m-%d  %H:%M:%S")
-        print(f"Transaktions datum och tid {dateTimeString}")
+        print(f"Transaktionstyp: {trans.transactionType} -- Belopp: {trans.amount} -- Transaktions datum och tid {dateTimeString}")
                             
 
 def adminAccount(account):
@@ -129,10 +127,16 @@ def adminAccount(account):
 
 
 def ReadAccountListFromFile(filename):
-    input = open(filename, "rb")
-    savedAccountList = pickle.load(input)
-    input.close()
-    return savedAccountList
+    try:
+        input = open(filename, "rb")
+        savedAccountList = pickle.load(input)
+        input.close()
+        print("Konton har lästs in från fil")
+        return savedAccountList
+    except IOError:
+        print("Filen är inte skapa ännu. Kör programmet och spara så skapas filen")
+    finally:
+        input.close()
 
 def CreateAccount():
     accountNumber = input("Ange konto nr: ")
@@ -158,9 +162,15 @@ def SelectAccount(listOfAllAccounts):
 
 
 def SaveAccountsToFile(accountList, filename):
-    output = open(filename, "wb")
-    pickle.dump(accountList, output, pickle.HIGHEST_PROTOCOL)
-    output.close()
+    try:
+        output = open(filename, "wb")
+        pickle.dump(accountList, output, pickle.HIGHEST_PROTOCOL)
+        output.close()
+        print("Konton har sparats:")
+    except:
+        print("Något fel har uppstått")
+    finally:
+        output.close()
 
 
 
