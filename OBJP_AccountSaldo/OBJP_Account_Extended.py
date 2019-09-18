@@ -13,12 +13,12 @@ class Transaction:
 
 class Account:
 
-    transactionLogg = []
-
+   # transactionLogg = []
 
     def __init__(self, accountNumber):
         self.accountNumber = accountNumber
         self.saldo = 0
+        self.transactionLogg = []
 
     def getAccountNumber(self):
         return self.accountNumber
@@ -102,7 +102,7 @@ def ListTransactions(account):
 
 def adminAccount(account):
     while True:
-        print("***KONTOMENY***")
+        print(f"***KONTOMENY för konto {account.getAccountNumber()}***")
         print("1. Ta ut pengar")
         print("2. Sätt in pengar")
         print("3. Visa saldo")
@@ -130,7 +130,7 @@ def LogInToAccount():
     while True:
         accountNumber = input("Ange kontonumret du vill logga in på: ")
         for account in accountList:
-            if accountNumber in account.getAccountNumber():
+            if accountNumber == account.getAccountNumber():
                 adminAccount(account)         
             else:
                 print("Fel konto nummer")
@@ -151,7 +151,6 @@ def SaveAccounts(accountList, filename):
     output.close()
 
 accountList = []
-#FILENAME = "kontofil2.pkl"
 
 FILENAME = "kontofil.pickle"
 
