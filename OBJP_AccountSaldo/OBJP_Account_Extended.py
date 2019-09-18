@@ -138,25 +138,25 @@ def LogInToAccount():
 
 
 def OpenAccountList(filename):
-    with open("filename", "rb") as input:
-        accountList = pickle.loads(input)
+    input = open(filename, "rb")
+    savedAccountList = pickle.load(input)
+    input.close()
+    return savedAccountList
 
 
 
 def SaveAccounts(accountList, filename):
-    with open(filename, "wb") as output:
-        pickle.dump(accountList, output, pickle.HIGHEST_PROTOCOL)
+    output = open(filename, "wb")
+    pickle.dump(accountList, output, pickle.HIGHEST_PROTOCOL)
     output.close()
 
 accountList = []
 #FILENAME = "kontofil2.pkl"
 
-FILENAME = "C:\\Users\\larsb\\source\\repos\\OBJP_AccountSaldo\\OBJP_AccountSaldo\\kontofil3.pkl"
-filnamn = "C:\\Users"\
+FILENAME = "kontofil.pickle"
 
 
 while True:
-    #accountList = []
 
     print("1 Läs in")
     print("2 Skapa konto")
@@ -167,7 +167,7 @@ while True:
     selection = GetMenySelection(1,5)
 
     if selection == 1:
-        OpenAccountList(FILENAME)
+        accountList = OpenAccountList(FILENAME)
     elif selection == 2:
         CreateAccount()
     elif selection == 3:
