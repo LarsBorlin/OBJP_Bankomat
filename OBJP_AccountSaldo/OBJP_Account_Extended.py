@@ -1,6 +1,7 @@
 import pickle
 import time
 from datetime import datetime
+from os import system
 
 
 class Transaction:
@@ -13,7 +14,6 @@ class Transaction:
 
 class Account:
 
-   # transactionLogg = []
 
     def __init__(self, accountNumber):
         self.accountNumber = accountNumber
@@ -54,27 +54,21 @@ def GetMenySelection(min,max):
     while True:
         try:
             inValue = int(input("<< "))
-            break
+            if inValue >= min and inValue <= max:
+                break
+            else:
+                print(f"Talet måste vara mellan {min} och {max}")
         except:
             print ("Ange bara ett tal, försök igen")
-    while True:
-        if inValue >= min and inValue <= max:
-            break
-        else:
-            print(f"Talet måste vara mellan {min} och {max}")
+
     return inValue
 
 
 
-def CreateAccount():
-    accountNumber = input("Ange konto nr: ")
-    accountList.append(Account(accountNumber))
 
 
-def ListAllAccountNumbers(listOfAllAccounts):
-    print("***Alla kontonummer skapade***")
-    for account in listOfAllAccounts:
-        print(f"Kontonummer: {account.getAccountNumber()}")
+
+
 
 
 def WithdrawFromAccount(account):
@@ -83,7 +77,7 @@ def WithdrawFromAccount(account):
          account.withdraw(sumToWithdraw)
          account.transactionLogg.append(Transaction("Withdraw", sumToWithdraw))
     else:
-         print("Du har för lite på saldot")
+         print("Du har för lite på kontot")
 
 def DepositToAccount(account):
     amountToDeposit = GetMoneyAmount()
@@ -92,6 +86,7 @@ def DepositToAccount(account):
         
 
 def ShowSaldo(account):
+    system("cls")
     print(f"Ditt saldo är {account.getSaldo()}")
 
 
@@ -102,8 +97,7 @@ def ListTransactions(account):
         print(f"Belopp: {trans.amount}")
         dateTimeString = trans.date.strftime("%Y-%m-%d  %H:%M:%S")
         print(f"Transaktions datum och tid {dateTimeString}")
-               
-                
+                            
 
 def adminAccount(account):
     while True:
@@ -115,7 +109,7 @@ def adminAccount(account):
         print("5. Gå tillbaka till HUVUDMENY")
 
 
-        selection = GetMenySelection(1,6)
+        selection = GetMenySelection(1,5)
 
         if selection == 1:
             WithdrawFromAccount(account)
@@ -131,37 +125,52 @@ def adminAccount(account):
             print("ERROR!! This can not happen")
 
 
-def LogInToAccount():
-    while True:
-        accountNumber = input("Ange kontonumret du vill logga in på: ")
-        for account in accountList:
-            if accountNumber == account.getAccountNumber():
-                adminAccount(account)         
-            else:
-                print("Fel konto nummer")
-        break
 
 
-def OpenAccountList(filename):
+
+def ReadAccountListFromFile(filename):
     input = open(filename, "rb")
     savedAccountList = pickle.load(input)
     input.close()
     return savedAccountList
 
+def CreateAccount():
+    accountNumber = input("Ange konto nr: ")
+    return Account(accountNumber)
 
 
-def SaveAccounts(accountList, filename):
+def ListAllAccountNumbers(listOfAllAccounts):
+    system("cls")
+    print("***Alla kontonummer skapade***")
+    for account in listOfAllAccounts:
+        print(f"Kontonummer: {account.getAccountNumber()}")
+
+
+def SelectAccount(listOfAllAccounts):
+    while True:
+        accountNumber = input("Ange kontonumret du vill logga in på: ")
+        for account in listOfAllAccounts:
+            if accountNumber == account.getAccountNumber():
+                return account     
+            
+        print(f"Kontonummer {accountNumber} finns ej. Försök med ett nytt kontonummer")
+        
+
+
+def SaveAccountsToFile(accountList, filename):
     output = open(filename, "wb")
     pickle.dump(accountList, output, pickle.HIGHEST_PROTOCOL)
     output.close()
 
-accountList = []
+
 
 FILENAME = "kontofil.pickle"
 
+accountList = []
+accountList = ReadAccountListFromFile(FILENAME)
 
 while True:
-
+    print("*** HUVUDMENY ***")
     print("1 Läs in kontot från fil")
     print("2 Skapa konto")
     print("3 Lista alla konton")
@@ -169,19 +178,23 @@ while True:
     print("5 Spara alla kontot till fil")
     print("6 Avsluta")
 
-    selection = GetMenySelection(1,5)
+    selection = GetMenySelection(1,6)
 
     if selection == 1:
-        accountList = OpenAccountList(FILENAME)
+        accountList = ReadAccountListFromFile(FILENAME)
     elif selection == 2:
-        CreateAccount()
+        newAccount = CreateAccount()
+        accountList.append(newAccount)
     elif selection == 3:
         ListAllAccountNumbers(accountList)
     elif selection == 4:
-        LogInToAccount()
+        accountToLogInTo = SelectAccount(accountList)
+        adminAccount(accountToLogInTo)
     elif selection == 5:
-        SaveAccounts(accountList, FILENAME)
+        SaveAccountsToFile(accountList, FILENAME)
     elif selection == 6:
+        if input("Vill du spara all konton innan du avslutar (J/N)").lower() == "j":
+            SaveAccountsToFile(accountList, FILENAME)
         break     
     else:
         print("Du ska inte vara här !!!!!!")
