@@ -71,6 +71,11 @@ def CreateAccount():
     accountList.append(Account(accountNumber))
 
 
+def ListAllAccountNumbers(listOfAllAccounts):
+    print("***Alla kontonummer skapade***")
+    for account in listOfAllAccounts:
+        print(f"Kontonummer: {account.getAccountNumber()}")
+
 
 def WithdrawFromAccount(account):
     sumToWithdraw = GetMoneyAmount()
@@ -110,7 +115,7 @@ def adminAccount(account):
         print("5. Gå tillbaka till HUVUDMENY")
 
 
-        selection = GetMenySelection(1,5)
+        selection = GetMenySelection(1,6)
 
         if selection == 1:
             WithdrawFromAccount(account)
@@ -157,11 +162,12 @@ FILENAME = "kontofil.pickle"
 
 while True:
 
-    print("1 Läs in")
+    print("1 Läs in kontot från fil")
     print("2 Skapa konto")
-    print("3 Logga in")
-    print("4 Spara")
-    print("5 Avsluta")
+    print("3 Lista alla konton")
+    print("4 Logga in")
+    print("5 Spara alla kontot till fil")
+    print("6 Avsluta")
 
     selection = GetMenySelection(1,5)
 
@@ -170,10 +176,12 @@ while True:
     elif selection == 2:
         CreateAccount()
     elif selection == 3:
-        LogInToAccount()
+        ListAllAccountNumbers(accountList)
     elif selection == 4:
-        SaveAccounts(accountList, FILENAME)
+        LogInToAccount()
     elif selection == 5:
+        SaveAccounts(accountList, FILENAME)
+    elif selection == 6:
         break     
     else:
         print("Du ska inte vara här !!!!!!")
