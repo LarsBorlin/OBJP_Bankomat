@@ -72,41 +72,35 @@ def CreateAccount():
 
 
 
-def WithdrawFromAccount(accountNumber):
-    for account in accountList:
-        if accountNumber == account.getAccountNumber():
-            sumToWithdraw = GetMoneyAmount()
-            if sumToWithdraw < account.getSaldo():
-                account.withdraw(sumToWithdraw)
-                account.transactionLogg.append(Transaction("Withdraw", sumToWithdraw))
-            else:
-                print("Du har för lite på saldot")
+def WithdrawFromAccount(account):
+    sumToWithdraw = GetMoneyAmount()
+    if sumToWithdraw < account.getSaldo():
+         account.withdraw(sumToWithdraw)
+         account.transactionLogg.append(Transaction("Withdraw", sumToWithdraw))
+    else:
+         print("Du har för lite på saldot")
 
-def DepositToAccount(accountNumber):
-    for account in accountList:
-        if accountNumber == account.getAccountNumber():
-            amountToDeposit = GetMoneyAmount()
-            account.deposit(amountToDeposit)
-            account.transactionLogg.append(Transaction("Deposit", amountToDeposit))
+def DepositToAccount(account):
+    amountToDeposit = GetMoneyAmount()
+    account.deposit(amountToDeposit)
+    account.transactionLogg.append(Transaction("Deposit", amountToDeposit))
         
 
-def ShowSaldo(accountNumber):
-    for account in accountList:
-        if accountNumber == account.getAccountNumber():
-            print(f"Ditt saldo är {account.getSaldo()}")
+def ShowSaldo(account):
+    print(f"Ditt saldo är {account.getSaldo()}")
 
-def ListTransactions(accountNumber):
-    for account in accountList:
-        if accountNumber == account.getAccountNumber():
-            for trans in account.transactionLogg:
-                print(f"Transaktionstyp: {trans.transactionType}")
-                print(f"Belopp: {trans.amount}")
-                dateTimeString = trans.date.strftime("%Y-%m-%d  %H:%M:%S")
-                print(f"Transaktions datum och tid {dateTimeString}")
+
+
+def ListTransactions(account):
+    for trans in account.transactionLogg:
+        print(f"Transaktionstyp: {trans.transactionType}")
+        print(f"Belopp: {trans.amount}")
+        dateTimeString = trans.date.strftime("%Y-%m-%d  %H:%M:%S")
+        print(f"Transaktions datum och tid {dateTimeString}")
                
                 
 
-def adminAccount(accountNumber):
+def adminAccount(account):
     while True:
         print("***KONTOMENY***")
         print("1. Ta ut pengar")
@@ -119,13 +113,13 @@ def adminAccount(accountNumber):
         selection = GetMenySelection(1,5)
 
         if selection == 1:
-            WithdrawFromAccount(accountNumber)
+            WithdrawFromAccount(account)
         elif selection == 2:
-            DepositToAccount(accountNumber)
+            DepositToAccount(account)
         elif selection == 3:
-            ShowSaldo(accountNumber)
+            ShowSaldo(account)
         elif selection == 4:
-            ListTransactions(accountNumber)
+            ListTransactions(account)
         elif selection == 5:
             break
         else:
@@ -137,7 +131,7 @@ def LogInToAccount():
         accountNumber = input("Ange kontonumret du vill logga in på: ")
         for account in accountList:
             if accountNumber in account.getAccountNumber():
-                adminAccount(accountNumber)         
+                adminAccount(account)         
             else:
                 print("Fel konto nummer")
         break

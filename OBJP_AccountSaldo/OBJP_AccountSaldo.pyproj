@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>5a6c77bd-c257-4a93-baca-6d8307a60725</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>pickleTest.py</StartupFile>
+    <StartupFile>OBJP_Account_Extended.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
